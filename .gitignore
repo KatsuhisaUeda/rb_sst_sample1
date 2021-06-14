@@ -23,3 +23,9 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# Project specific
+.env*.local
+!aspida.config.js
+
+# Develop environment specific
+.vscode/

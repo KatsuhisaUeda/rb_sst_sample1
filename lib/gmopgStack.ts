@@ -8,6 +8,17 @@ export default class GmopgStack extends sst.Stack {
     const api = new sst.Api(this, "Api", {
       routes: {
         "GET /": "src/lambda/hello.handler",
+        "POST /payment/start": {
+          function: {
+            srcPath: "src/lambda/",
+            handler: "getGmopgPaymentUrl.handler",
+            environment: {
+              GMOPG_SHOP_ID: process.env.GMOPG_SHOP_ID || "",
+              GMOPG_SHOP_PASS: process.env.GMOPG_SHOP_PASS || "",
+            },
+            permissions: ["ssm"],
+          },
+        },
       },
     });
 

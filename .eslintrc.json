@@ -24,9 +24,14 @@
       "extends": [
         "eslint:recommended",
         "plugin:@typescript-eslint/recommended",
+        "plugin:aspida/recommended",
         "prettier"
       ],
       "rules": { "no-useless-constructor": "off" }
+    },
+    {
+      "files": ["aspida.config.js"],
+      "parserOptions": { "ecmaVersion": 2015 }
     }
   ]
 }
