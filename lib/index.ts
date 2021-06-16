@@ -1,6 +1,6 @@
 import * as sst from "@serverless-stack/resources";
 
-import GmopgStack from "./gmopgStack";
+import SampleStack from "./sampleStack";
 
 export default function main(app: sst.App): void {
   // Set default runtime for all functions
@@ -8,7 +8,7 @@ export default function main(app: sst.App): void {
     runtime: "nodejs12.x",
   });
 
-  new GmopgStack(app, "gmopg-stack");
+  new SampleStack(app, "sample-stack");
 
   // Add more stacks
 }
