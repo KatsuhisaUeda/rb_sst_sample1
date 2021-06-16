@@ -8,13 +8,24 @@ export default class SampleStack extends sst.Stack {
     const api = new sst.Api(this, "Api", {
       routes: {
         "GET /": "src/lambda/hello.handler",
-        "POST /payment/start": {
+        "POST /gmo/payment/start": {
           function: {
             srcPath: "src/lambda/",
             handler: "getGmopgPaymentUrl.handler",
             environment: {
               GMOPG_SHOP_ID: process.env.GMOPG_SHOP_ID || "",
               GMOPG_SHOP_PASS: process.env.GMOPG_SHOP_PASS || "",
+            },
+            permissions: ["ssm"],
+          },
+        },
+        "GET /pring/app-auth": {
+          function: {
+            srcPath: "src/lambda/",
+            handler: "authorizePringAppUrl.handler",
+            environment: {
+              PRING_CLIENT_ID: process.env.PRING_CLIENT_ID || "",
+              PRING_SCHEME: process.env.PRING_SCHEME || "",
             },
             permissions: ["ssm"],
           },
