@@ -2,20 +2,27 @@ import {
   GetLinkplusUrlPaymentBody,
   GetLinkplusUrlPaymentResult,
 } from "../service/apis/gmopg/payment/GetLinkplusUrlPayment.json";
+import { fetchSSMParam } from "../service/awsSsmClient";
 import { GmopgClient } from "../service/gmopgClient";
+
+interface RequestPaymentUrlParams {
+  orderId: string;
+  amount: number;
+  guildeMailAddress?: string;
+  customerName?: string;
+}
 
 export class SampleUsecase {
   /**
    * Request GMOPG payment URL
    */
-  public requestPaymentUrl(
-    shopId: string,
-    shopPass: string,
-    orderId: string,
-    amount: number,
-    guildeMailAddress?: string,
-    customerName?: string
+  public async requestPaymentUrl(
+    params: RequestPaymentUrlParams
   ): Promise<GetLinkplusUrlPaymentResult> {
+    const [shopId, shopPass] = await Promise.all([
+      fetchSSMParam(process.env.GMOPG_SHOP_ID || ""),
+      fetchSSMParam(process.env.GMOPG_SHOP_PASS || ""),
+    ]);
     const reqBody: GetLinkplusUrlPaymentBody = {
       geturlparam: {
         ShopID: shopId,
@@ -23,15 +30,15 @@ export class SampleUsecase {
       },
       configid: "1",
       transaction: {
-        OrderID: orderId,
-        Amount: amount,
+        OrderID: params.orderId,
+        Amount: params.amount,
       },
       credit: {},
     };
-    if (guildeMailAddress != null) {
+    if (params.guildeMailAddress != null) {
       reqBody.geturlparam.GuideMailSendFlag = "1";
-      reqBody.geturlparam.SendMailAddress = guildeMailAddress;
-      reqBody.geturlparam.CustomerName = customerName;
+      reqBody.geturlparam.SendMailAddress = params.guildeMailAddress;
+      reqBody.geturlparam.CustomerName = params.customerName;
     }
     return new GmopgClient().GetLinkplusUrlPayment(reqBody);
   }
