@@ -30,6 +30,18 @@ export default class SampleStack extends sst.Stack {
             permissions: ["ssm"],
           },
         },
+        "POST /pring/purchase": {
+          function: {
+            srcPath: "src/lambda/",
+            handler: "purchase.handler",
+            environment: {
+              PRING_CLIENT_ID: process.env.PRING_CLIENT_ID || "",
+              PRING_CLIENT_SECRET: process.env.PRING_CLIENT_SECRET || "",
+              PRING_API_BASE_URL: process.env.PRING_API_BASE_URL || "",
+            },
+            permissions: ["ssm"],
+          },
+        },
       },
     });
 
